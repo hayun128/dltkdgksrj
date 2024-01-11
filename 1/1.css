@@ -1,0 +1,74 @@
+body {
+  background-color: #333333;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  --from: 80px;
+  --to: 200px;
+  --size: 32px;
+  --time: 7s;
+  --count: 51; /* up to 100 (..?)*/
+  --turns: 6;
+}
+
+.circle {
+  /* position: absolute; */
+
+  --delay: calc(var(--time) / var(--count) * -1 * var(--i));
+  rotate: calc(var(--turns) * 1turn / var(--count) * var(--i));
+
+  animation: circle var(--time) var(--delay) ease-in-out infinite;
+  /*           name | duration| timing-function | 애니메이션을 자연스럽게 만듬 서서히 시작 - 서서히 종료 
+  */
+}
+.circle:nth-child(n + var(--count)) {
+  /*부모안에 circle이라는 선택자중 n+var(--count)번째 요소 선택*/
+  display: none;
+}
+.circle::before {
+  /*요소의 콘텐츠 시작부분에 생성된 콘텐츠 추가*/
+  content: ""; /*선택한 요소의 앞이나 뒤에(선택은 ::before 이런걸로) 텍스트나 이미지 추가*/
+  display: block;
+
+  width: var(--size);
+  aspect-ratio: 1/1; /*요소 크기를 비율대로 조정  width / height*/
+
+  border-radius: 50%;
+  background-color: white;
+
+  transform-origin: center center; /*transform과 함께 사용, 기준점을 정하기 위해 사용*/
+
+  animation: circleSize var(--time) var(--delay) ease-in-out infinite;
+}
+
+.rainbow .circle::before {
+  background-color: hsl(
+    calc(1turn / (var(--count) / var(--turns)) * var(--i)) 100% 70%
+  );
+}
+
+@keyframes circle {
+  from {
+    transform: translate(0, var(--from));
+    /*translate(x축 기준 이동시킬 값, y축 기준 이동시킬값) */
+    /* 현재 요소 위치 기준, x는 0, y축 from씩 이동*/
+  }
+  to {
+    transform: translate(0, var(--to));
+  }
+}
+
+@keyframes circleSize {
+  0%,
+  100% {
+    transform: scale(0);
+  }
+  25%,
+  50% {
+    transform: scale(1);
+  }
+}
